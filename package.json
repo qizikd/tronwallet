@@ -1,0 +1,16 @@
+{
+  "name": "tronwallet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "connect-multiparty": "^2.2.0",
+    "log4js": "^4.1.0",
+    "tronweb": "^2.5.0"
+  }
+}
