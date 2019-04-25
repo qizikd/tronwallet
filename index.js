@@ -37,12 +37,21 @@ const tronWeb = new TronWeb(
 async function trade(to,amount,from,privateKey){
     // Performs the trade between Token and TRX
     const tx = await tronWeb.transactionBuilder.sendTrx(to, amount, from);
+	if (tx == undefined){
+		throw new Error(`创建交易失败`)
+	}
 
     // Signing the transaction
     const signedtxn = await tronWeb.trx.sign(tx, privateKey);
-
+	if (signedtxn == undefined){
+		throw new Error(`交易签名失败`)
+	}
+	
     // Broadcasting the transaction
     const receipt = await tronWeb.trx.sendRawTransaction(signedtxn);    
+	if (receipt == undefined){
+		throw new Error(`交易发送失败`)
+	}	
 	return receipt
 };
 
@@ -165,13 +174,12 @@ app.post('/wallet/trx/sendto',multipartMiddleware, function (req, res, next) {
 			console.log((new Date()).toLocaleString(),"交易成功:",json)	;
 		}	
 	}).catch((err) => {
-		console.log((new Date()).toLocaleString(),"发送tx请求失败:",err.message);
-		logger.error((new Date()).toLocaleString(),'发送tx请求失败:', err.message)
-		console.log((new Date()).toLocaleString(), "发送tx请求失败",err.message);     //网络请求失败返回的数据  
+		logger.error((new Date()).toLocaleString(),'发送tx请求失败:', err)
+		console.log((new Date()).toLocaleString(), "发送tx请求失败",err);     //网络请求失败返回的数据  
 		var json = {};				
 		json.code = -1
 		json.msg = "交易失败"
-		json.errorinfo = "发送tx请求失败:" + err.message
+		json.errorinfo = "发送tx请求失败:" + err
 		res.end(JSON.stringify(json))
 		return		
 	});
